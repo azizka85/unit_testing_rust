@@ -73,7 +73,6 @@ impl Like {
   }
 }
 
-/* 
 #[cfg(test)]
 mod tests {
   use crate::repository;
@@ -87,4 +86,4 @@ mod tests {
     }
   }
 }
- */
+

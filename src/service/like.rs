@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, error::Error};
 
 use crate::{models, repository};
 
@@ -11,10 +11,14 @@ impl Like {
     Self { like_repository }
   }
 
-  pub fn most_liked_author(&self) -> Option<models::User> {
+  pub fn most_liked_author(&self) -> Result<Option<models::User>, ()> {
     let mut users = HashMap::new();
 
     for like in self.like_repository.list() {
+      if like.post.author.id <= 0 {
+        return Err(());
+      }
+
       let t = users
         .entry(like.post.author.id)
         .or_insert((
@@ -35,11 +39,10 @@ impl Like {
       }
     }
 
-    max_user
+    Ok(max_user)
   }
 }
 
-/* 
 #[cfg(test)]
 mod tests {
   use crate::service;
@@ -56,4 +59,4 @@ mod tests {
     assert!(res.is_ok());
   }
 }
-*/
+
